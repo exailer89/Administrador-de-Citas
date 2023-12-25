@@ -6,9 +6,45 @@ const fechaInput = document.querySelector('#fecha');
 const horaInput = document.querySelector('#hora');
 const sintomasInput = document.querySelector('#sintomas');
 
+
 // Interfaz de Usuario
 const formulario = document.querySelector('#nueva-cita');
 const contenedorCitas = document.querySelector('#citas');
+
+class Citas {
+    constructor() {
+        this.citas = [];
+    }
+}
+
+class UI {
+    imprimirAlerta(mensaje, tipo) {
+        const divMensaje = document.createElement('div');
+        divMensaje.classList.add('text-center', 'alert', 'd-block', 'col-12');
+
+        // Agregar clase en base al tipo de error
+        if(tipo === 'error') {
+            divMensaje.classList.add('alert-danger');
+        } else {
+            divMensaje.classList.add('alert-success');
+        }
+
+        // Mensaje de error
+        divMensaje.textContent = mensaje;
+
+        // Agregar al DOM
+        document.querySelector('#contenido').insertBefore(divMensaje, document.querySelector('.agregar-cita'))
+
+        // Quitar la alerta despues de 4 segundos
+        setTimeout(() => {
+            divMensaje.remove();
+        }, 4000);
+    }
+}
+
+const administrarCitas = new Citas();
+const ui = new UI();
+
 
 // Registro de Eventos
 eventListener();
@@ -19,6 +55,7 @@ function eventListener() {
     fechaInput.addEventListener('input', datosCita);
     horaInput.addEventListener('input', datosCita);
     sintomasInput.addEventListener('input', datosCita);
+    formulario.addEventListener('submit', nuevaCita);
 }
 
 // Objeto con Información de la Cita
@@ -37,3 +74,30 @@ function datosCita(e) {
 
     console.log(citaObj);
 }
+
+// Valida y Agrega una nueva cita a la Clase Citas.
+function nuevaCita(e) {
+    e.preventDefault();
+    
+    // Extraer información del objeto citaObj
+    const {mascota, propietario, telefono, fecha, hora, sintomas} = citaObj;
+
+    // Validar
+    if(mascota === '' || propietario === '' || telefono === '' || fecha === '' || hora === '' || sintomas === '') {
+        ui.imprimirAlerta('Todos los campos son obligatorios', 'error');
+
+        return;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
